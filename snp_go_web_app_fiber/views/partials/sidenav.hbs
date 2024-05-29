@@ -1,0 +1,74 @@
+<div class="side-nav">
+
+    <div class="accordion">
+        <input id="accordion-1" type="checkbox" name="accordion-radio" hidden="" checked="">
+        <label class="accordion-header c-hand" for="accordion-1"><i class="icon icon-arrow-right mr-1"></i>Go To</label>
+        <div class="accordion-body">
+            <ul class="menu menu-nav">
+                <li class="menu-item">
+                    <a href="/sample/index" class="@(ViewBag.Title == " Sample" ? "active" : "" )">
+                        Sample
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/sampleprogram" class="@(ViewBag.Title == " SampleProgram" ? "active" : "" )">
+                        Sample Program
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/Home/Index" class="@(ViewBag.Title == " Home" ? "active" : "" )">
+                        Home
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/socialpost/index" class="@(ViewBag.Title == " SocialPost" ? "active" : "" )">
+                        Social Post
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/list/index" class="@(ViewBag.Title == " List" ? "active" : "" )">
+                        List
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/tilelist/index" class="@(ViewBag.Title == " TileList" ? "active" : "" )">
+                        Tile List
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/Permissions/Index" class="@(ViewBag.Title == " Permissions" ? "active" : "" )">
+                        Permissions
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="accordion">
+        <input id="accordion-2" type="checkbox" name="accordion-radio" hidden="">
+        <label class="accordion-header c-hand" for="accordion-2"><i class="icon icon-arrow-right mr-1"></i>Admin</label>
+        <div class="accordion-body">
+            <ul class="menu menu-nav">
+                <li class="menu-item"><a href="#accordions">Users</a></li>
+                <li class="menu-item"><a href="#accordions">User Groups</a></li>
+                <li class="menu-item"><a href="#accordions">Group Permissions</a></li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="accordion">
+        <input id="accordion-3" type="checkbox" name="accordion-radio" hidden="">
+        <label class="accordion-header c-hand" for="accordion-3">
+            <i class="icon icon-arrow-right mr-1"></i>Connections
+        </label>
+        <div class="accordion-body">
+            <ul class="menu menu-nav">
+                <li class="menu-item"><a href="#accordions">Facebook</a></li>
+                <li class="menu-item"><a href="#accordions">Snap</a></li>
+                <li class="menu-item"><a href="#accordions">S3</a></li>
+                <li class="menu-item"><a href="#accordions">Azure Data Lake</a></li>
+                <li class="menu-item"><a href="#accordions">Snap</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
