@@ -442,13 +442,15 @@ function searchItems(){
             var items = JSON.parse(response);
             var itemsList = iget('listItemsHolder');
             itemsList.innerHTML = '';
-            items.result.forEach(function(item){
-                var elem = document.createElement('tr');
-                elem.id = 'item' + item.sampleProgramId;
-                var template = renderListItem(item);
-                elem.innerHTML = template;
-                itemsList.appendChild(elem);
-            });
+            if (items.result != null){
+                items.result.forEach(function(item){
+                    var elem = document.createElement('tr');
+                    elem.id = 'item' + item.sampleProgramId;
+                    var template = renderListItem(item);
+                    elem.innerHTML = template;
+                    itemsList.appendChild(elem);
+                });
+            }
         });
     }
     if (term.length == 0){

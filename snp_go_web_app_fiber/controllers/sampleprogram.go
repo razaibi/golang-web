@@ -104,8 +104,13 @@ func GetAllSamplePrograms(ctx *fiber.Ctx) error {
 
 func SearchAllSamplePrograms(ctx *fiber.Ctx) error {
 	term := ctx.Query("term")
+	if term == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Query parameter 'term' is required"})
+	}
 	var samplePrograms []models.SampleProgram
-	err := db.GetDB().Select(&samplePrograms, "SELECT * FROM SampleProgram LIMIT 7", term)
+	// Correcting the SQL query and parameter usage
+	query := "SELECT * FROM SampleProgram WHERE name LIKE ? LIMIT 7"
+	err := db.GetDB().Select(&samplePrograms, query, "%"+term+"%")
 	if err != nil {
 		return ctx.Status(fiber.StatusNotFound).SendString("Sample programs not found")
 	}

@@ -24,13 +24,14 @@ func setupUserRoutes(app *fiber.App) {
 		}, "layouts/main")
 	})
 
+	app.Get("/sampleprogram/search", controllers.SearchAllSamplePrograms)
+	app.Get("/sampleprogram/all", controllers.GetAllSamplePrograms)
+	app.Get("/sampleprogram/count", controllers.GetSampleProgramCount)
+	app.Post("/sampleprogram/create", controllers.CreateSampleProgram)
 	app.Get("/sampleprogram/item/:id", controllers.GetSampleProgramById)
 	app.Get("/sampleprogram/details/:id", controllers.GetSampleProgramDetailsById)
 	app.Put("/sampleprogram/:id", controllers.EditSampleProgram)
 	app.Delete("/sampleprogram/:id", controllers.DeleteSampleProgram)
-	app.Get("/sampleprogram/all", controllers.GetAllSamplePrograms)
-	app.Get("/sampleprogram/count", controllers.GetSampleProgramCount)
-	app.Post("/sampleprogram/create", controllers.CreateSampleProgram)
 	app.Get("/sampleprogram", controllers.GetSampleProgramPage)
 
 }
