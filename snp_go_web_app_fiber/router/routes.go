@@ -11,7 +11,7 @@ func SetupRoutes(app *fiber.App) {
 }
 
 func setupUserRoutes(app *fiber.App) {
-
+	// Group for general routes
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Render("index", fiber.Map{
 			"title": "Home",
@@ -24,23 +24,27 @@ func setupUserRoutes(app *fiber.App) {
 		}, "layouts/main")
 	})
 
-	app.Get("/sampleprogram/search", controllers.SearchAllSamplePrograms)
-	app.Get("/sampleprogram/all", controllers.GetAllSamplePrograms)
-	app.Get("/sampleprogram/count", controllers.GetSampleProgramCount)
-	app.Post("/sampleprogram/create", controllers.CreateSampleProgram)
-	app.Get("/sampleprogram/item/:id", controllers.GetSampleProgramById)
-	app.Get("/sampleprogram/details/:id", controllers.GetSampleProgramDetailsById)
-	app.Put("/sampleprogram/:id", controllers.EditSampleProgram)
-	app.Delete("/sampleprogram/:id", controllers.DeleteSampleProgram)
-	app.Get("/sampleprogram", controllers.GetSampleProgramPage)
+	// Group for SampleProgram routes
+	sampleProgramGroup := app.Group("/sampleprogram")
+	sampleProgramGroup.Get("/search", controllers.SearchAllSamplePrograms)
+	sampleProgramGroup.Get("/all", controllers.GetAllSamplePrograms)
+	sampleProgramGroup.Get("/count", controllers.GetSampleProgramCount)
+	sampleProgramGroup.Post("/create", controllers.CreateSampleProgram)
+	sampleProgramGroup.Get("/details/:id", controllers.GetSampleProgramDetailsById)
+	sampleProgramGroup.Get("/item/:id", controllers.GetSampleProgramById)
+	sampleProgramGroup.Put("/:id", controllers.EditSampleProgram)
+	sampleProgramGroup.Delete("/:id", controllers.DeleteSampleProgram)
+	sampleProgramGroup.Get("", controllers.GetSampleProgramPage)
 
-	app.Get("/sample/search", controllers.SearchAllSamples)
-	app.Get("/sample/all", controllers.GetAllSamples)
-	app.Get("/sample/count", controllers.GetSampleCount)
-	app.Post("/sample/create", controllers.CreateSample)
-	app.Get("/sample/item/:id", controllers.GetSampleProgramById)
-	app.Get("/sample/details/:id", controllers.GetSampleDetailsById)
-	app.Put("/sample/:id", controllers.EditSample)
-	app.Delete("/sample/:id", controllers.DeleteSample)
-	app.Get("/sample", controllers.GetSamplePage)
+	// Group for Sample routes
+	sampleGroup := app.Group("/sample")
+	sampleGroup.Get("/search", controllers.SearchAllSamples)
+	sampleGroup.Get("/all", controllers.GetAllSamples)
+	sampleGroup.Get("/count", controllers.GetSampleCount)
+	sampleGroup.Post("/create", controllers.CreateSample)
+	sampleGroup.Get("/details/:id", controllers.GetSampleDetailsById)
+	sampleGroup.Get("/item/:id", controllers.GetSampleById)
+	sampleGroup.Put("/:id", controllers.EditSample)
+	sampleGroup.Delete("/:id", controllers.DeleteSample)
+	sampleGroup.Get("", controllers.GetSamplePage)
 }

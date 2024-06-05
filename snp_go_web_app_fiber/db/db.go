@@ -23,7 +23,7 @@ func GetDB() *sqlx.DB {
 }
 
 func createTables() {
-	createUserTable := `
+	createUserTableQuery := `
     CREATE TABLE IF NOT EXISTS Users (
         UserId TEXT PRIMARY KEY,
         Username TEXT NOT NULL UNIQUE,
@@ -39,7 +39,7 @@ func createTables() {
 		IsMFAEnabled INTEGER DEFAULT 0
     );`
 
-	createSampleProgram := `
+	createSampleProgramQuery := `
 	CREATE TABLE SampleProgram (
 		SampleProgramId INTEGER PRIMARY KEY,
 		Name TEXT NOT NULL,
@@ -49,12 +49,30 @@ func createTables() {
 	);	
 	`
 
-	_, err := db.Exec(createUserTable)
+	createSampleQuery := `
+	CREATE TABLE Sample (
+		SampleId INTEGER PRIMARY KEY,
+		SampleProgramId INTEGER,
+		Title TEXT NOT NULL,
+		Content TEXT NOT NULL,
+		IsActive BOOLEAN NOT NULL,
+		CreatedOn TIMESTAMP NOT NULL,
+		LastModifiedOn TIMESTAMP NOT NULL,
+		FOREIGN KEY (SampleProgramId) REFERENCES SampleProgram(SampleProgramId)
+	);	
+	`
+
+	_, err := db.Exec(createUserTableQuery)
 	if err != nil {
 		log.Fatalf("Failed to create tables: %v", err)
 	}
 
-	_, err = db.Exec(createSampleProgram)
+	_, err = db.Exec(createSampleProgramQuery)
+	if err != nil {
+		log.Fatalf("Failed to create tables: %v", err)
+	}
+
+	_, err = db.Exec(createSampleQuery)
 	if err != nil {
 		log.Fatalf("Failed to create tables: %v", err)
 	}

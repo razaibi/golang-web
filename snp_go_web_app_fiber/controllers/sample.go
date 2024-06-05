@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"snp_go_web_app_fiber/db"
 	"snp_go_web_app_fiber/models"
 	"strconv"
@@ -95,20 +96,27 @@ func DeleteSample(ctx *fiber.Ctx) error {
 	return ctx.SendStatus(fiber.StatusAccepted)
 }
 
-func GetAllSamples(c *fiber.Ctx) error {
-	var samples []models.Sample
-	skip, _ := strconv.Atoi(c.Query("skip", "0"))
-	take, _ := strconv.Atoi(c.Query("take", "7"))
-	query := `SELECT s.*, sp.Name as SampleProgramName
-	FROM Sample s
-	JOIN SampleProgram sp ON s.SampleProgramId = sp.SampleProgramId
-	ORDER BY s.LastModifiedOn DESC
-	LIMIT ? OFFSET ?`
-	err := db.GetDB().Select(&samples, query, take, skip)
+func GetAllSamples(ctx *fiber.Ctx) error {
+	var samples []models.SampleOutDto
+	skip, err := strconv.Atoi(ctx.Query("skip", "0"))
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).SendString("No samples found")
+		return ctx.Status(fiber.StatusBadRequest).SendString("Invalid skip parameter")
 	}
-	return c.JSON(samples)
+	take := "7"
+
+	query := `SELECT s.*, sp.Name as SampleProgramName
+              FROM Sample s
+              JOIN SampleProgram sp ON s.SampleProgramId = sp.SampleProgramId
+              ORDER BY s.LastModifiedOn DESC
+              LIMIT ? OFFSET ?`
+	err = db.GetDB().Select(&samples, query, take, skip)
+	if err != nil {
+		fmt.Println(err)
+		return ctx.Status(fiber.StatusNotFound).SendString("No samples found")
+	}
+	return ctx.JSON(fiber.Map{
+		"result": samples,
+	})
 }
 
 func SearchAllSamples(c *fiber.Ctx) error {
