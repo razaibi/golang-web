@@ -3,12 +3,12 @@ package models
 import "time"
 
 type SampleOutDto struct {
-	SampleId          int       `db:"SampleId" json:"SampleId"`
-	SampleProgramId   int       `db:"SampleProgramId" json:"SampleProgramId"`
-	SampleProgramName string    `db:"SampleProgramName" json:"SampleProgramName"`
-	Title             string    `db:"Title" json:"Title"`
-	Content           string    `db:"Content" json:"Content"`
-	IsActive          bool      `db:"IsActive" json:"IsActive"`
-	CreatedOn         time.Time `db:"CreatedOn" json:"CreatedOn"`
-	LastModifiedOn    time.Time `db:"LastModifiedOn" json:"LastModifiedOn"`
+	SampleId          int       `db:"SampleId" json:"sampleId"`
+	SampleProgramId   int       `db:"SampleProgramId" json:"sampleProgramId"`
+	SampleProgramName string    `db:"SampleProgramName" json:"sampleProgramName"`
+	Title             string    `db:"Title" json:"title"`
+	Content           string    `db:"Content" json:"content"`
+	IsActive          bool      `db:"IsActive" json:"isActive"`
+	CreatedOn         time.Time `db:"CreatedOn" json:"createdOn"`
+	LastModifiedOn    time.Time `db:"LastModifiedOn" json:"lastModifiedOn"`
 }

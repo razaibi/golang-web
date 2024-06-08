@@ -23,7 +23,7 @@ func GetSampleDetailsById(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).SendString("Invalid ID")
 	}
 
-	var sample models.Sample
+	var sample models.SampleOutDto
 	query := `SELECT s.*, sp.Name as SampleProgramName
 	FROM Sample s
 	JOIN SampleProgram sp ON s.SampleProgramId = sp.SampleProgramId
@@ -35,21 +35,26 @@ func GetSampleDetailsById(c *fiber.Ctx) error {
 	return c.JSON(sample)
 }
 
-func CreateSample(c *fiber.Ctx) error {
+func CreateSample(ctx *fiber.Ctx) error {
 	sample := new(models.Sample)
-	if err := c.BodyParser(sample); err != nil {
-		return c.Status(fiber.StatusBadRequest).SendString(err.Error())
+	if err := ctx.BodyParser(sample); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).SendString(err.Error())
 	}
 
 	sample.CreatedOn = time.Now()
 	sample.LastModifiedOn = time.Now()
-	_, err := db.GetDB().NamedExec(`INSERT INTO Sample (SampleProgramId, Title, Content, IsActive, CreatedOn, LastModifiedOn) 
+	result, err := db.GetDB().NamedExec(`INSERT INTO Sample (SampleProgramId, Title, Content, IsActive, CreatedOn, LastModifiedOn) 
 		VALUES (:SampleProgramId, :Title, :Content, :IsActive, :CreatedOn, :LastModifiedOn)`, sample)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
-
-	return c.JSON(sample)
+	// Retrieve the last inserted ID
+	lastInsertID, err := result.LastInsertId()
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	sample.SampleId = int(lastInsertID)
+	return ctx.JSON(sample)
 }
 
 func EditSample(c *fiber.Ctx) error {
@@ -73,8 +78,11 @@ func EditSample(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
 
-	var result models.Sample
-	err = db.GetDB().Get(&result, `SELECT * FROM Sample WHERE SampleId = ?`, id)
+	var result models.SampleOutDto
+	err = db.GetDB().Get(&result, `SELECT s.*, sp.Name as SampleProgramName
+	FROM Sample s
+	JOIN SampleProgram sp ON s.SampleProgramId = sp.SampleProgramId
+	WHERE s.SampleId = ?`, id)
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).SendString("Sample not found")
 	}
@@ -157,13 +165,14 @@ func GetSampleById(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusNotFound).SendString("Invalid ID")
 	}
 
-	var sample models.Sample
+	var sample models.SampleOutDto
 	query := `SELECT s.*, sp.name as SampleProgramName
 	FROM Sample s
 	JOIN SampleProgram sp ON s.SampleProgramId = sp.SampleProgramId
 	WHERE s.SampleId = ?`
 	err = db.GetDB().Get(&sample, query, id)
 	if err != nil {
+		fmt.Println(err)
 		return ctx.Status(fiber.StatusNotFound).SendString("Sample not found")
 	}
 	return ctx.JSON(sample)

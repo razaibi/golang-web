@@ -297,7 +297,7 @@ function makeRequest(method, url, data, callback, useToken){
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if(xhr.readyState === XMLHttpRequest.DONE){
-            if (xhr.status === 200){
+            if (xhr.status === 200 || xhr.status === 202){
                 callback(xhr.responseText);
             }else{
                 showToast('error', `Unable to make request. Check your connection.`);
@@ -473,20 +473,19 @@ function addItem(){
             listCount += 1;
             showToast('primary', `Added "${item.name}".`);
             renderPagingList();
-            if (currentPage == 1)
+        if (currentPage == 1)
         {
             // Lookup ref.
-        var template = renderListItem(item);
-        var elem = document.createElement('tr');
-        elem.id = 'item' + item.sampleProgramId;
-        elem.innerHTML = template;
-        var itemsList = iget('listItemsHolder');
+            var template = renderListItem(item);
+            var elem = document.createElement('tr');
+            elem.id = 'item' + item.sampleProgramId;
+            elem.innerHTML = template;
+            var itemsList = iget('listItemsHolder');
 
-        if (listCount-1 > pageSize){
-            itemsList.removeChild(itemsList.lastChild);
-        }
-        itemsList.insertBefore(elem, itemsList.firstChild);
-
+            if (listCount-1 > pageSize){
+                itemsList.removeChild(itemsList.lastChild);
+            }
+            itemsList.insertBefore(elem, itemsList.firstChild);
         }
         iget("frmAddData").reset();
         setTimeout(function() {
@@ -501,14 +500,14 @@ function deleteItem(id, name) {
         element.className = 'greyed-out';
         //element.remove();
         listCount -= 1;
+        iget('editBtn' + id).disabled = true;
+        iget('detailsBtn' + id).disabled = true;
+        iget('delBtn' + id).disabled = true;
         totalPageCount = Math.ceil(listCount / pageSize);
         if (currentPage > totalPageCount){
             currentPage = totalPageCount;
             gotoPage(currentPage);
         }
-        iget('editBtn' + id).disabled = true;
-        iget('detailsBtn' + id).disabled = true;
-        iget('delBtn' + id).disabled = true;
         showToast('error', `Removed "${name}".`);
         renderPagingList();
         setTimeout(function() {
